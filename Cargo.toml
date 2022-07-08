@@ -1,0 +1,18 @@
+[package]
+name = "gp_algo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+memuse = "0.2.0"
+human_bytes = "0.3"
+clap = {version = "3.2", features = ["derive"]}
+itertools = "0.10"
+termion = "1.5"
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "benchmark"
+harness = false
