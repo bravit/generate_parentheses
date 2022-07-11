@@ -65,13 +65,13 @@ pub fn generate_parenthesis(n: i32) -> Vec<String> {
         let expected = combinations.iter().filter(
             |pc| pc.has_alternatives()
         ).count();
-        let mut provisioned = Vec::new();
-        provisioned.resize_with(expected, || ParenthesesCombination::new(n as usize));
+        let old_len = combinations.len();
+        combinations.resize_with(old_len + expected, || ParenthesesCombination::new(n as usize));
+        let (current, provisioned) = combinations.split_at_mut(old_len);
         let mut provisioned_iter = provisioned.iter_mut();
-        for comb in combinations.iter_mut() {
+        for comb in current.iter_mut() {
             comb.add_parenthesis(&mut provisioned_iter)
         }
-        combinations.append(&mut provisioned);
     }
     combinations.into_iter().map(|l| l.line).collect()
 }
