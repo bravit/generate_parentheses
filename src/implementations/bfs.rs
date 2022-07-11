@@ -9,7 +9,7 @@ impl ParenthesesCombination {
     #[inline(always)]
     fn new(n: usize) -> Self {
         Self {
-            line: String::new(),
+            line: String::with_capacity(n as usize * 2),
             open: n as u8,
             close: 0,
         }
@@ -38,6 +38,7 @@ impl ParenthesesCombination {
     ) {
         if self.has_alternatives() {
             let mut comb = self.clone();
+            comb.line.reserve_exact(self.line.capacity() - comb.line.len());
             comb.add_opening();
             provisioned.push(comb);
 
