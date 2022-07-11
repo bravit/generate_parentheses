@@ -59,7 +59,10 @@ pub fn generate_parenthesis(n: i32) -> Vec<String> {
     combinations.push(initial_combination);
 
     for _ in 1..=2 * n - 1 {
-        let mut provisioned = vec![];
+        let expected = combinations.iter().filter(
+            |pc| pc.has_alternatives()
+        ).count();
+        let mut provisioned = Vec::with_capacity(expected);
         for comb in combinations.iter_mut() {
             comb.add_parenthesis(&mut provisioned)
         }
