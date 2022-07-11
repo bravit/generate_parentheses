@@ -1,4 +1,5 @@
 use std::slice::IterMut;
+use crate::implementations::catalan_number;
 
 #[derive(Clone, Debug, PartialEq)]
 struct ParenthesesCombination {
@@ -55,7 +56,7 @@ impl ParenthesesCombination {
 }
 
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
-    let mut combinations = vec![];
+    let mut combinations = Vec::with_capacity(catalan_number(n as usize));
 
     let mut initial_combination = ParenthesesCombination::new(n as usize);
     initial_combination.add_opening();
