@@ -1,3 +1,5 @@
+use std::slice::IterMut;
+
 #[derive(Clone, Debug, PartialEq)]
 struct ParenthesesCombination {
     pub line: String,
@@ -34,13 +36,14 @@ impl ParenthesesCombination {
 
     fn add_parenthesis(
         &mut self,
-        provisioned: &mut Vec<Self>
+        provisioned_iter: &mut IterMut<Self>
     ) {
         if self.has_alternatives() {
-            let mut comb = self.clone();
-            comb.line.reserve_exact(self.line.capacity() - comb.line.len());
+            let comb = provisioned_iter.next().unwrap();
+            comb.line.push_str(self.line.as_str());
+            comb.open = self.open;
+            comb.close = self.close;
             comb.add_opening();
-            provisioned.push(comb);
 
             self.add_closing();
         } else if self.open > 0 {
@@ -62,9 +65,11 @@ pub fn generate_parenthesis(n: i32) -> Vec<String> {
         let expected = combinations.iter().filter(
             |pc| pc.has_alternatives()
         ).count();
-        let mut provisioned = Vec::with_capacity(expected);
+        let mut provisioned = Vec::new();
+        provisioned.resize_with(expected, || ParenthesesCombination::new(n as usize));
+        let mut provisioned_iter = provisioned.iter_mut();
         for comb in combinations.iter_mut() {
-            comb.add_parenthesis(&mut provisioned)
+            comb.add_parenthesis(&mut provisioned_iter)
         }
         combinations.append(&mut provisioned);
     }
@@ -93,8 +98,9 @@ mod test {
             close: 1,
         };
 
-        let mut vec: Vec<ParenthesesCombination> = vec![];
-        comb.add_parenthesis(&mut vec);
+        let mut vec: Vec<ParenthesesCombination> = vec![ParenthesesCombination::new(3)];
+        let mut iter = vec.iter_mut();
+        comb.add_parenthesis(&mut iter);
 
         assert_eq!(comb, comb_c);
         assert_eq!(vec[0], comb_o);
