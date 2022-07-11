@@ -65,3 +65,4 @@ Output: ["()"]
 - [Cargo criterion plugin](https://crates.io/crates/cargo-criterion)
 - [Cargo instruments plugin](https://crates.io/crates/cargo-instruments)
 - [Valgrind](https://valgrind.org/)
+- [Catalan Number](https://en.wikipedia.org/wiki/Catalan_number)
