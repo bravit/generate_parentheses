@@ -59,3 +59,9 @@ Output: ["()"]
 - Exploring memory usage
 - Using Instruments (macOS) and Valgrind (Linux)
 - Integrating with Docker
+
+## Links
+
+- [Cargo criterion plugin](https://crates.io/crates/cargo-criterion)
+- [Cargo instruments plugin](https://crates.io/crates/cargo-instruments)
+- [Valgrind](https://valgrind.org/)
