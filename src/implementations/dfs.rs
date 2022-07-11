@@ -1,23 +1,23 @@
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
-    let mut sequences: Vec<String> = vec![];
+    let mut combinations: Vec<String> = vec![];
     let mut str = String::new();
-    dfs(&mut sequences, &mut str, n as usize, 0);
-    sequences
+    dfs(&mut combinations, &mut str, n as usize, 0);
+    combinations
 }
 
-fn dfs(sequences: &mut Vec<String>, str: &mut String, open: usize, close: usize) {
+fn dfs(combinations: &mut Vec<String>, str: &mut String, open: usize, close: usize) {
     if (open == 0) && (close == 0) {
-        sequences.push(str.clone());
+        combinations.push(str.clone());
         return
     }
     if open > 0 {
         str.push('(');
-        dfs(sequences, str, open-1, close+1);
+        dfs(combinations, str, open-1, close+1);
         str.pop();
     }
     if close > 0 {
         str.push(')');
-        dfs(sequences, str, open, close-1);
+        dfs(combinations, str, open, close-1);
         str.pop();
     }
 }

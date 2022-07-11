@@ -1,14 +1,14 @@
 #[derive(Clone, Debug, PartialEq)]
-struct ParenthesesSequence {
+struct ParenthesesCombination {
     pub line: String,
     pub open: u8,
     pub close: u8,
 }
 
-impl ParenthesesSequence {
+impl ParenthesesCombination {
     #[inline(always)]
-    fn new(n: usize) -> ParenthesesSequence {
-        ParenthesesSequence {
+    fn new(n: usize) -> ParenthesesCombination {
+        ParenthesesCombination {
             line: String::new(),
             open: n as u8,
             close: 0,
@@ -16,30 +16,30 @@ impl ParenthesesSequence {
     }
 
     #[inline(always)]
-    fn add_opening(self: &mut ParenthesesSequence) {
+    fn add_opening(self: &mut ParenthesesCombination) {
         self.line.push('(');
         self.open -= 1;
         self.close += 1
     }
 
     #[inline(always)]
-    fn add_closing(self: &mut ParenthesesSequence) {
+    fn add_closing(self: &mut ParenthesesCombination) {
         self.line.push(')');
         self.close -= 1;
     }
 
-    fn has_alternatives(self:&ParenthesesSequence) -> bool {
+    fn has_alternatives(self:&ParenthesesCombination) -> bool {
         self.open > 0 && self.close > 0
     }
 
     fn add_parenthesis(
-        self: &mut ParenthesesSequence,
-        provisioned: &mut Vec<ParenthesesSequence>
+        self: &mut ParenthesesCombination,
+        provisioned: &mut Vec<ParenthesesCombination>
     ) {
         if self.has_alternatives() {
-            let mut pseq = self.clone();
-            pseq.add_opening();
-            provisioned.push(pseq);
+            let mut comb = self.clone();
+            comb.add_opening();
+            provisioned.push(comb);
 
             self.add_closing();
         } else if self.open > 0 {
@@ -51,20 +51,20 @@ impl ParenthesesSequence {
 }
 
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
-    let mut sequences = vec![];
+    let mut combinations = vec![];
 
-    let mut initial_sequence = ParenthesesSequence::new(n as usize);
-    initial_sequence.add_opening();
-    sequences.push(initial_sequence);
+    let mut initial_combination = ParenthesesCombination::new(n as usize);
+    initial_combination.add_opening();
+    combinations.push(initial_combination);
 
     for _ in 1..=2 * n - 1 {
         let mut provisioned = vec![];
-        for seq in sequences.iter_mut() {
-            seq.add_parenthesis(&mut provisioned)
+        for comb in combinations.iter_mut() {
+            comb.add_parenthesis(&mut provisioned)
         }
-        sequences.append(&mut provisioned);
+        combinations.append(&mut provisioned);
     }
-    sequences.into_iter().map(|l| l.line).collect()
+    combinations.into_iter().map(|l| l.line).collect()
 }
 
 #[cfg(test)]
@@ -73,27 +73,27 @@ mod test {
 
     #[test]
     fn add_parenthesis_test() {
-        let mut line = ParenthesesSequence {
+        let mut comb = ParenthesesCombination {
             line: "((".into(),
             open: 1,
             close: 2,
         };
-        let line_o = ParenthesesSequence {
+        let comb_o = ParenthesesCombination {
             line: "(((".into(),
             open: 0,
             close: 3,
         };
-        let line_c = ParenthesesSequence {
+        let comb_c = ParenthesesCombination {
             line: "(()".into(),
             open: 1,
             close: 1,
         };
 
-        let mut vec: Vec<ParenthesesSequence> = vec![];
-        line.add_parenthesis(&mut vec);
+        let mut vec: Vec<ParenthesesCombination> = vec![];
+        comb.add_parenthesis(&mut vec);
 
-        assert_eq!(line, line_c);
-        assert_eq!(vec[0], line_o);
+        assert_eq!(comb, comb_c);
+        assert_eq!(vec[0], comb_o);
     }
 
 }
