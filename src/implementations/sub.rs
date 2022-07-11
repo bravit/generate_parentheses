@@ -1,9 +1,11 @@
+use crate::implementations::catalan_number;
+
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
 
     let mut combinations:Vec<Vec<String>> = vec![vec!["".to_string()], vec!["()".to_string()]];
 
     for k in 2..=n as usize {
-        let mut k_combination = vec![];
+        let mut k_combination = Vec::with_capacity(catalan_number(k));
         for c in 0..k {
             for left in &combinations[c] {
                 for right in &combinations[k-1-c] {

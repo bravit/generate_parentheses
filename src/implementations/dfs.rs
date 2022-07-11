@@ -1,5 +1,7 @@
+use crate::implementations::catalan_number;
+
 pub fn generate_parenthesis(n: i32) -> Vec<String> {
-    let mut combinations: Vec<String> = vec![];
+    let mut combinations: Vec<String> = Vec::with_capacity(catalan_number(n as usize));
     let mut str = String::new();
     dfs(&mut combinations, &mut str, n as usize, 0);
     combinations
