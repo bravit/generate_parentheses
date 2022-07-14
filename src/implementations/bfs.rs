@@ -7,8 +7,8 @@ struct ParenthesesCombination {
 
 impl ParenthesesCombination {
     #[inline(always)]
-    fn new(n: usize) -> ParenthesesCombination {
-        ParenthesesCombination {
+    fn new(n: usize) -> Self {
+        Self {
             line: String::new(),
             open: n as u8,
             close: 0,
@@ -16,25 +16,25 @@ impl ParenthesesCombination {
     }
 
     #[inline(always)]
-    fn add_opening(self: &mut ParenthesesCombination) {
+    fn add_opening(&mut self) {
         self.line.push('(');
         self.open -= 1;
         self.close += 1
     }
 
     #[inline(always)]
-    fn add_closing(self: &mut ParenthesesCombination) {
+    fn add_closing(&mut self) {
         self.line.push(')');
         self.close -= 1;
     }
 
-    fn has_alternatives(self:&ParenthesesCombination) -> bool {
+    fn has_alternatives(&self) -> bool {
         self.open > 0 && self.close > 0
     }
 
     fn add_parenthesis(
-        self: &mut ParenthesesCombination,
-        provisioned: &mut Vec<ParenthesesCombination>
+        &mut self,
+        provisioned: &mut Vec<Self>
     ) {
         if self.has_alternatives() {
             let mut comb = self.clone();
