@@ -8,7 +8,7 @@ memuse = "0.2.0"
 human_bytes = "0.3"
 clap = {version = "3.2", features = ["derive"]}
 itertools = "0.10"
-termion = "1.5"
+termcolor = "1.1"
 
 [dev-dependencies]
 criterion = "0.3"

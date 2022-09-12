@@ -4,7 +4,7 @@ use human_bytes::human_bytes;
 use std::time::Instant;
 use clap::{CommandFactory, ErrorKind, Parser};
 use itertools::Itertools;
-use termion::{color, style};
+use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
 #[derive(Parser)]
 #[clap(author, about, long_about = None, trailing_var_arg=true)]
@@ -23,8 +23,15 @@ struct Arguments {
     implementations: Vec<String>,
 }
 
+fn println_report_header(header: String) {
+    let mut stdout = StandardStream::stdout(ColorChoice::Always);
+    stdout.set_color(ColorSpec::new().set_bold(true).set_fg(Some(Color::Blue))).unwrap();
+    println!("{}", header);
+    stdout.reset().unwrap();
+}
+
 fn report(n: i32, implementation_name: String, generator: GenerateParenthesesFn, verbose: bool) {
-    println!("{}== Running: {} =={}", style::Bold, implementation_name, style::Reset);
+    println_report_header(format!("== Running {} ==", implementation_name));
     let now = Instant::now();
     let vec = generator(n);
     let elapsed = now.elapsed();
@@ -45,26 +52,23 @@ fn main() {
     let args = Arguments::parse();
 
     let available_implementations_info =
-        format!("{}Available implementations are: {}.{}",
-                 color::Fg(color::Yellow),
-                 IMPLEMENTATIONS.iter().map(|(name, _)| name).join(", "),
-                 style::Reset);
+        format!("Available implementations are: {}.",
+                 IMPLEMENTATIONS.iter().map(|(name, _)| name).join(", "), );
 
     if args.implementations.is_empty() {
         Arguments::command().error(
             ErrorKind::ArgumentNotFound,
-            format!("{}No implementations requested.{}\n{}.", style::Bold, style::Reset, available_implementations_info)
+            format!("No implementations requested.\n{}", available_implementations_info)
         ).exit();
     }
 
     for impl_name in args.implementations {
         match find_implementation(impl_name.as_str()) {
-            None => {
-                eprintln!("{}error:{} {}Unknown implementation: `{}`.{}\n{}",
-                         color::Fg(color::Red), style::Reset, style::Bold,
-                         impl_name, style::Reset,
-                         available_implementations_info);
-            }
+            None => Arguments::command().error(
+                        ErrorKind::ValueValidation,
+                        format!("Nonexistent implementation: {}.\n{}",
+                                impl_name, available_implementations_info)
+                    ).exit(),
             Some(gen) => {
                 report(args.size, impl_name, gen, args.verbose)
             }
