@@ -11,7 +11,7 @@ itertools = "0.10"
 termcolor = "1.1"
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = "0.4"
 
 [[bench]]
 name = "benchmark"
