@@ -1,0 +1,21 @@
+schemaVersion: 2.2.0
+metadata:
+    name: 'Generate Parenthesis (sample project)'
+attributes:
+    space:
+        instanceType: large
+        editor:
+            type: Fleet
+            version: '1.18.90'
+            updateChannel: 'EAP Candidate'
+        warmup:
+            startOn:
+            - type: gitPush
+              branchFilter:
+                  include:
+                      - 'refs/heads/master'
+            script: ./dev-env-warmup.sh
+components:
+- name: dev-container
+  container:
+      image: registry.jetbrains.team/p/intellij-conf-fleet-demo/containers/dev-container:latest
