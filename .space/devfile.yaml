@@ -18,4 +18,4 @@ attributes:
 components:
 - name: dev-container
   container:
-      image: registry.jetbrains.team/p/intellij-conf-fleet-demo/containers/dev-container:latest
+      image: registry.jetbrains.team/p/vitaly-bragilevsky/containers/dev-container:latest
